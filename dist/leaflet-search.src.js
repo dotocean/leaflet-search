@@ -451,23 +451,20 @@ L.Control.Search = L.Control.extend({
 	},
 
 	showTooltip: function(records) {
-		
-
 		this._countertips = 0;
 		this._tooltip.innerHTML = '';
 		this._tooltip.currentSelection = -1;  //inizialized for _handleArrowSelect()
 
 		if(this.options.tooltipLimit)
 		{
-			for(var key in records)//fill tooltip
-			{
+			Object.keys(records).sort().forEach((key)=>{
 				if(this._countertips === this.options.tooltipLimit)
-					break;
+					return;
 				
 				this._countertips++;
 
 				this._tooltip.appendChild( this._createTip(key, records[key]) );
-			}
+			});
 		}
 		
 		if(this._countertips > 0)
@@ -710,7 +707,6 @@ L.Control.Search = L.Control.extend({
 			case 40://Down
 				this._handleArrowSelect(1);
 			break;
-			case  8://Backspace
 			case 45://Insert
 			case 46://Delete
 				this._autoTypeTmp = false;//disable temporarily autoType
@@ -825,7 +821,7 @@ L.Control.Search = L.Control.extend({
 	
 		var searchTips = this._tooltip.hasChildNodes() ? this._tooltip.childNodes : [];
 			
-		for (i=0; i<searchTips.length; i++)
+		for (var i=0; i<searchTips.length; i++)
 			L.DomUtil.removeClass(searchTips[i], 'search-tip-select');
 		
 		if ((velocity == 1 ) && (this._tooltip.currentSelection >= (searchTips.length - 1))) {// If at end of list.
